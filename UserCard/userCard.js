@@ -90,5 +90,3 @@
 
     customElements.define('user-card', UserCard);
 })();
-
-
