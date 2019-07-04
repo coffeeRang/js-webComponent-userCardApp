@@ -1,4 +1,3 @@
-
 (async () => {
     const res = await fetch('./UserCard/UserCard.html');
     const textTemplate = await res.text();
@@ -16,49 +15,76 @@
 
         connectedCallback() {
             let self = this;
+            
+            // shadowDOM 생성
             const shadowRoot = this.attachShadow({mode: 'open'});
-    
             const instance = HTMLTemplate.content.cloneNode(true);
             shadowRoot.appendChild(instance);
+
+            self.searchGitUser('coffeeRang');
         
-            const userId = this.getAttribute('user-id');
+            // const userId = this.getAttribute('user-id');
         
-            const sendUrl = `https://api.github.com/users/coffeeRang`;
-        
-            fetch(sendUrl).then(function(res) {
-                return res = res.json();
-            }).then(function(res) {
-                console.log(res);
-                self.render(res);
-            }).catch(function(error) {
-                console.log(':: error : ', error);
-        
-            });
         };
 
+        searchGitUser(userId) {
+            let self = this;
+            let sendUrl = `https://api.github.com/users/${userId}`;
+
+            fetch(sendUrl)
+            .then((res) => res.json())
+            .then(function(res) {
+                self.logFn(res);
+                self.render(res);
+            }).catch(function(error) {
+                console.log(':: error : ', error)
+            })
+        }
+
+        searchUserProfileByGitUserId(gitUserId) {
+            let self = this;
+            let sendUrl = `http://my-json-server.typicode.com/coffeeRang/demo-db/profile/${gitUserId}`;
+
+            fetch(sendUrl)
+            .then((res) => res.json())
+            .then(function(res) {
+                self.logFn('useJsonServer', res);
+
+            }).catch(function(error) {
+                self.errorFn(error);
+
+            })
+        }
+
         toggleCard() {
-            console.log("Element was clicked!");
             let elem = this.shadowRoot.querySelector('.card__hidden-content');
             let btn = this.shadowRoot.querySelector('.card__details-btn');
             btn.innerHTML = elem.style.display == 'none' ? 'Less Details' : 'More Details';
             elem.style.display = elem.style.display == 'none' ? 'black' : 'none';
         }
 
-        render(userData) {
-            console.log('userData')
-            const loginId = userData.login;
-            const created_at = userData.created_at;
-            const public_repos = userData.public_repos;
-            const public_gists = userData.public_gists;
-            const followers = userData.followers;
-            this.shadowRoot.querySelector('.card__full-name').innerHTML = loginId;
-            this.shadowRoot.querySelector('.card__user-name').innerHTML = created_at;
-            this.shadowRoot.querySelector('.card__website').innerHTML = public_repos;
-            this.shadowRoot.querySelector('.card__address').innerHTML = public_gists;
+        render({login, created_at, public_repos, public_gists, followers, avatar_url}) {
+            this.logFn('render method run');
+            this.shadowRoot.querySelector('.card__login-id').innerHTML = login;
+            this.shadowRoot.querySelector('.card__created-date').innerHTML = created_at;
+            this.shadowRoot.querySelector('.card__public-repos').innerHTML = public_repos;
+            this.shadowRoot.querySelector('.card__public-gists').innerHTML = public_gists;
+            this.shadowRoot.querySelector('#profile1').src = avatar_url;
         };
-        logFn(data) {
-            console.log(':: logFn : ', data);
+
+        logFn(msg, data) {
+            let logText = '';
+            if (data === undefined) {
+                logText = msg;
+            } else {
+                logText = `[${msg}] = ${data}`;
+            }
+            console.log(':: logFn:', logText);
         };
+
+        errorFn(error) {
+            console.error(':: error : ', error);
+        }
 
     }
 

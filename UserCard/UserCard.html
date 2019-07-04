@@ -1,17 +1,21 @@
 <template id="user-card-template">
   <div class="card__user-card-container">
     <h2 class="card__name">
-      <span class="card__full-name"></span> (
-      <span class="card__user-name"></span>)
+      <span class="card__login-id"></span>
     </h2>
-    <p>Website: <a class="card__website"></a></p>
+    <p>
+      <div class="card__profile">
+          <img src="" id="profile1" class="card__profile" alt=""/>
+      </div>
+    </p>
+    <p>(<span class="card__created-date"></span>)</p>
+    <p>repos: <a class="card__public-repos"></a></p>
     <div class="card__hidden-content">
-      <p class="card__address"></p>
+      <p class="card__public-gists"></p>
     </div>
     <button class="card__details-btn">More Details</button>
   </div>
   <link rel="stylesheet" href="/UserCard/UserCard.css">
 </template>
 <script src="/UserCard/UserCard.js"></script>
-
 
