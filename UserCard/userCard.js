@@ -1,5 +1,5 @@
 (async () => {
-    const res = await fetch('./UserCard/UserCard.html');
+    const res = await fetch('./userCard/userCard.html');
     const textTemplate = await res.text();
     const HTMLTemplate = new DOMParser().parseFromString(textTemplate, 'text/html').querySelector('template');
 
@@ -11,7 +11,7 @@
                 this.toggleCard();
             });
             this.connectedCallback.bind(this);
-        };
+        }
 
         connectedCallback() {
             let self = this;
@@ -21,10 +21,8 @@
             const instance = HTMLTemplate.content.cloneNode(true);
             shadowRoot.appendChild(instance);
 
-            self.searchGitUser('coffeeRang');
-        
+            self.searchGitUser('coffeeRang');        
             // const userId = this.getAttribute('user-id');
-        
         };
 
         searchGitUser(userId) {
